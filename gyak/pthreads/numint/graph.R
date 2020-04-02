@@ -40,44 +40,18 @@ computeMeans <- function(dataTable, r)
   dataTable <- dataTmp / r
 }
 
-linelabels <- c('Szekvenciális implementáció', 'OpenMP párhuzamosítás 2 szálon')
+linelabels <- c('Szekvenciális implementáció', 'Pthreads párhuzamosítás 2 szálon')
 
-
-data0 <- read.table('./results/matrixnm-szekv-N.txt')
-data1 <- read.table('./results/matrixnm-par-N.txt')
+data0 <- read.table('./results/numint-szekv.txt')
+data1 <- read.table('./results/numint-par.txt')
 
 data0 <- computeMeans(data0, repeats)
 data1 <- computeMeans(data1, repeats)
+
 
 d <- data.frame(data0$V1, data0$V2, data1$V2)
 colnames(d) <- c('sigma', 'runtime1', 'runtime2')
 dataa <- melt(d, id='sigma', variable_name='series')
 
 figure1("./results/figure-n.eps", dataa, expression(paste("Futásidők az N paraméter függvényében")), 'N', 'Futási idő (s)', linelabels)
-
-
-data0 <- read.table('./results/matrixnm-szekv-M.txt')
-data1 <- read.table('./results/matrixnm-par-M.txt')
-
-data0 <- computeMeans(data0, repeats)
-data1 <- computeMeans(data1, repeats)
-
-d <- data.frame(data0$V1, data0$V2, data1$V2)
-colnames(d) <- c('sigma', 'runtime1', 'runtime2')
-dataa <- melt(d, id='sigma', variable_name='series')
-
-figure1("./results/figure-m.eps", dataa, expression(paste("Futásidők az M paraméter függvényében")), 'M', 'Futási idő (s)', linelabels)
-
-
-data0 <- read.table('./results/matrixnm-szekv-P.txt')
-data1 <- read.table('./results/matrixnm-par-P.txt')
-
-data0 <- computeMeans(data0, repeats)
-data1 <- computeMeans(data1, repeats)
-
-d <- data.frame(data0$V1, data0$V2, data1$V2)
-colnames(d) <- c('sigma', 'runtime1', 'runtime2')
-dataa <- melt(d, id='sigma', variable_name='series')
-
-figure1("./results/figure-p.eps", dataa, expression(paste("Futásidők a P paraméter függvényében")), 'P', 'Futási idő (s)', linelabels)
 

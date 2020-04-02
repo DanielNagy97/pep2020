@@ -5,8 +5,6 @@
 
 NUMBERS="256 512 1024 2048 4096"
 
-RANDOMS="32 64 128 256 512"
-
 # THREADS="2"
 
 BASE_VAL="128"
@@ -24,8 +22,6 @@ OUTPUT2=matrixnm-szekv-P.txt
 OUTPUT3=matrixnm-par-N.txt
 OUTPUT4=matrixnm-par-M.txt
 OUTPUT5=matrixnm-par-P.txt
-OUTPUT6=matrixnm-szekv-R.txt
-OUTPUT7=matrixnm-par-R.txt
 
 touch ${OUTPUTDIR}/${OUTPUT0}
 touch ${OUTPUTDIR}/${OUTPUT1}
@@ -33,8 +29,6 @@ touch ${OUTPUTDIR}/${OUTPUT2}
 touch ${OUTPUTDIR}/${OUTPUT3}
 touch ${OUTPUTDIR}/${OUTPUT4}
 touch ${OUTPUTDIR}/${OUTPUT5}
-touch ${OUTPUTDIR}/${OUTPUT6}
-touch ${OUTPUTDIR}/${OUTPUT7}
 
 # futás N paraméterekre
 for N in ${NUMBERS}
@@ -75,20 +69,5 @@ do
     done
 done
 
-# futás a random számok felső korlátjainak paramétereire paramétereire
-for R in ${RANDOMS}
-do
-    for I in `seq 1 1 ${REPEATS}`
-    do
-        echo -n ${R} " " >> ./${OUTPUTDIR}/${OUTPUT6}
-        ./bin/matrixnm ${BASE_VAL} ${BASE_VAL} ${BASE_VAL} ${R} 0 >> ./${OUTPUTDIR}/${OUTPUT6}
-
-        echo -n ${R} " " >> ./${OUTPUTDIR}/${OUTPUT7}
-        ./bin/matrixnm ${BASE_VAL} ${BASE_VAL} ${BASE_VAL} ${R} 1 >> ./${OUTPUTDIR}/${OUTPUT7}
-    done
-done
-
-
 sudo Rscript graph.R ${REPEATS}
 
-echo "se"
