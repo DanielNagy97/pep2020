@@ -43,15 +43,8 @@ int main(void){
     }
     stopSOMP(&st);
 
-    for(i = 0; i<SIZE; i++){
-        for(j = 0; j<SIZE; j++){
-            if(i==0&&j==0 || i==SIZE-1 && j==SIZE-1){
-                printf("%ld\n",C[i][j]);
-            }
-            
-        }
+    printf("%ld\n",C[SIZE-1][SIZE-1]);
 
-    }
     tprintfOMP(&st, "\n");
 
     return 0;
