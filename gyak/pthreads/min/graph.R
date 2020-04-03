@@ -42,13 +42,14 @@ computeMeans <- function(dataTable, r)
 
 linelabels <- c('Szekvenciális implementáció', 'Pthreads párhuzamosítás 2 szálon', 'Pthreads párhuzamosítás 4 szálon')
 
-data0 <- read.table('./results/numint-szekv.txt')
-data1 <- read.table('./results/numint-par-2.txt')
-data2 <- read.table('./results/numint-par-4.txt')
+data0 <- read.table('./results/min-szekv.txt')
+data1 <- read.table('./results/min-par-2.txt')
+data2 <- read.table('./results/min-par-4.txt')
 
 data0 <- computeMeans(data0, repeats)
 data1 <- computeMeans(data1, repeats)
 data2 <- computeMeans(data2, repeats)
+
 
 d <- data.frame(data0$V1, data0$V2, data1$V2, data2$V2)
 colnames(d) <- c('sigma', 'runtime1', 'runtime2', 'runtime3')

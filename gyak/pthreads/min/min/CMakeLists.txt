@@ -7,6 +7,6 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 SUBDIRS(src/lib src/app)
 
-SET(CMAKE_C_FLAGS "-pthread")
+SET(CMAKE_C_FLAGS "-pthread -fopenmp -O0")
 SET(CMAKE_VERBOSE_MAKEFILE on)
 
