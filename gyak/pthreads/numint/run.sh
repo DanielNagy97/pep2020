@@ -36,7 +36,7 @@ do
         ./numint_szekv/bin/numint_szekv ${N} >> ./${OUTPUTDIR}/${OUTPUT0}
     done
 done
-echo -e "[\e[92mSzekvenciális futás\e[0m] Futáseredmények kiírva a(z) ${OUTPUTDIR}/${OUTPUT0} fájlba."
+echo -e "[\e[92mSzekvenciális futás\e[0m] Futáseredmények kiírva a(z) ./${OUTPUTDIR}/${OUTPUT0} fájlba."
 echo ""
 # Párhuzamos futás N paraméter
 
@@ -51,7 +51,7 @@ do
         ./numint/bin/numint 4 ${N} >> ./${OUTPUTDIR}/${OUTPUT2}
     done
 done
-echo -e "[\e[92mPárhuzamos futás\e[0m] Futáseredmények kiírva a(z) ${OUTPUTDIR}/${OUTPUT1}, ${OUTPUTDIR}/${OUTPUT2} fájlokba."
+echo -e "[\e[92mPárhuzamos futás\e[0m] Futáseredmények kiírva a(z) ./${OUTPUTDIR}/${OUTPUT1}, ${OUTPUTDIR}/${OUTPUT2} fájlokba."
 echo ""
 
 echo -e "[\e[92mRscript\e[0m] Gráf generálása\e[5m... \e[25m"
