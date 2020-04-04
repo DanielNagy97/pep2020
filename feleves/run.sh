@@ -11,7 +11,7 @@ NUMBERS="32768 65536 131072 262144 524288"
 
 OUTPUTDIR="results/runtimes"
 
-REPEATS="5"
+REPEATS="3"
 
 A="10"
 Q="0.5"
@@ -20,7 +20,7 @@ Q="0.5"
 sudo rm -rf ${OUTPUTDIR}
 sudo mkdir ${OUTPUTDIR}
 
-CHUNKK="2"
+CHUNKK="1"
 
 OUTPUT0=numbers-szekv.txt
 OUTPUT1=numbers-par-2.txt

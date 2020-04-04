@@ -30,15 +30,8 @@ int main(int argc, char** argv){
     {
         #pragma omp for private(i) reduction(+:final_sum)
         for(i=0; i<chunk_n; i++){
-            final_sum = recursive_geomseq_sum(i*(chunk_size), (i+1)*chunk_size-1, first_element*pow(q, i*(chunk_size)), q);
+            final_sum += recursive_geomseq_sum(i*(chunk_size), (i+1)*chunk_size-1, first_element*pow(q, i*(chunk_size)), q);
         }
-
-/*
-            #pragma omp for private(i)
-            for(i=0; i<chunk_n; i++){
-                final_sum = final_sum + sum[i];
-            }
-*/
     }
     stopSOMP(&sw);
 
@@ -65,11 +58,4 @@ double recursive_geomseq_sum(double i, double n, double a, double q){
         return 0;
     }  
 }
-/*
-        //#pragma omp for private(i)
-        for(i=0; i<threads_n; i++){
-            #pragma omp task
-            sum[i] = recursive_geomseq_sum(i*(chunk_size), (i+1)*chunk_size-1, first_element*pow(q, i*(chunk_size)), q);
-        }
 
-*/
