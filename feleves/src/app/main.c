@@ -4,13 +4,11 @@
 #include <math.h>
 #include <stopper.h>
 
-// first_element q n chunk_n threads_n if_parallel
-
-double recursive_geomseq_sum(double i, double n, double a, double q);
+double geomseq_sum(double i, double n, double a, double q);
 
 int main(int argc, char** argv){
 
-    stopperOMP sw;
+    stopperOMP st;
 
     double first_element = atof(argv[1]);
     double q = atof(argv[2]);
@@ -22,40 +20,34 @@ int main(int argc, char** argv){
     long int i;
     long int chunk_size = n/chunk_n;
 
-
-    //omp_set_nested(1);
-
-    startSOMP(&sw);
+    startSOMP(&st);
     #pragma omp parallel num_threads(threads_n) if(atoi(argv[6]))
     {
         #pragma omp for private(i) reduction(+:final_sum)
         for(i=0; i<chunk_n; i++){
-            final_sum += recursive_geomseq_sum(i*(chunk_size), (i+1)*chunk_size-1, first_element*pow(q, i*(chunk_size)), q);
+            final_sum += geomseq_sum(i*(chunk_size),
+                                     (i+1)*chunk_size-1,
+                                     first_element*pow(q, i*(chunk_size)),
+                                     q);
         }
     }
-    stopSOMP(&sw);
+    stopSOMP(&st);
 
-    tprintfOMP(&sw, "\n");
+    tprintfOMP(&st, "\n");
 
     //printf("%f\n", final_sum);
 
     return 0;
 }
 
-double recursive_geomseq_sum(double i, double n, double a, double q){
+double geomseq_sum(double i, double n, double a, double q){
 
     if(i <= n)
     {
-        double x;
-        #pragma omp task shared(x)
-        x = recursive_geomseq_sum(i+1, n, a*q, q);
-            
-        #pragma omp taskwait
-        return a + x;
+        return a + geomseq_sum(i+1, n, a*q, q);
     }
     else
     {
         return 0;
     }  
 }
-

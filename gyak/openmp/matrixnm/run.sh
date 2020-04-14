@@ -1,11 +1,7 @@
 #! /bin/bash
 # ulimit -S -s 262144
 
-# NUMBERS="2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072 262144"
-
 NUMBERS="256 512 1024 2048 4096"
-
-# THREADS="2"
 
 BASE_VAL="128"
 
@@ -30,9 +26,13 @@ touch ${OUTPUTDIR}/${OUTPUT3}
 touch ${OUTPUTDIR}/${OUTPUT4}
 touch ${OUTPUTDIR}/${OUTPUT5}
 
+echo "-----Ranksort OpenMP párhuzamosítással-----"
+echo ""
+
 # futás N paraméterekre
 for N in ${NUMBERS}
 do
+    echo -e "[\e[92mSzekvenciális futás és párhuzamos futás\e[0m] N = ${N} paraméterrel"
     for I in `seq 1 1 ${REPEATS}`
     do
         echo -n ${N} " " >> ./${OUTPUTDIR}/${OUTPUT0}
@@ -42,10 +42,13 @@ do
         ./bin/matrixnm ${N} ${BASE_VAL} ${BASE_VAL} ${BASE_VAL} 1 >> ./${OUTPUTDIR}/${OUTPUT3}
     done
 done
+echo -e "[\e[92mSzekvenciális futás és párhuzamos futás\e[0m] Futáseredmények kiírva a(z) ./${OUTPUTDIR}/${OUTPUT0} és ./${OUTPUTDIR}/${OUTPUT3} fájlokba."
+echo ""
 
 # futás M paraméterekre
 for M in ${NUMBERS}
 do
+    echo -e "[\e[92mSzekvenciális futás és párhuzamos futás\e[0m] N = ${N} paraméterrel"
     for I in `seq 1 1 ${REPEATS}`
     do
         echo -n ${M} " " >> ./${OUTPUTDIR}/${OUTPUT1}
@@ -55,10 +58,13 @@ do
         ./bin/matrixnm ${BASE_VAL} ${M} ${BASE_VAL} ${BASE_VAL} 1 >> ./${OUTPUTDIR}/${OUTPUT4}
     done
 done
+echo -e "[\e[92mSzekvenciális futás és párhuzamos futás\e[0m] Futáseredmények kiírva a(z) ./${OUTPUTDIR}/${OUTPUT1} és ./${OUTPUTDIR}/${OUTPUT4} fájlokba."
+echo ""
 
 # futás P paraméterekre
 for P in ${NUMBERS}
 do
+    echo -e "[\e[92mSzekvenciális futás és párhuzamos futás\e[0m] N = ${N} paraméterrel"
     for I in `seq 1 1 ${REPEATS}`
     do
         echo -n ${P} " " >> ./${OUTPUTDIR}/${OUTPUT2}
@@ -68,6 +74,9 @@ do
         ./bin/matrixnm ${BASE_VAL} ${BASE_VAL} ${P} ${BASE_VAL} 1 >> ./${OUTPUTDIR}/${OUTPUT5}
     done
 done
+echo -e "[\e[92mSzekvenciális futás és párhuzamos futás\e[0m] Futáseredmények kiírva a(z) ./${OUTPUTDIR}/${OUTPUT2} és ./${OUTPUTDIR}/${OUTPUT5} fájlokba."
+echo ""
 
+echo -e "[\e[92mRscript\e[0m] Gráfok generálása\e[5m... \e[25m"
 sudo Rscript graph.R ${REPEATS}
 

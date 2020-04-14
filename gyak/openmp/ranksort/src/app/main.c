@@ -6,17 +6,20 @@
 #define lower_limit -1000
 #define upper_limit 1000
 
-int main(int argc, char** argv){
-
+int main(int argc, char** argv)
+{
     long int n = atoi(argv[1]);
     int threads = atoi(argv[2]);
     int to_parallel = atoi(argv[3]);
 
-    int a[n];
-    int final[n];
+    int* a;
+    int* final;
+
+    a = malloc(sizeof(*a) * n);
+    final = malloc(sizeof(*final) * n);
+
     int i, j;
     int rank, count;
-
 
     srand(0);
 

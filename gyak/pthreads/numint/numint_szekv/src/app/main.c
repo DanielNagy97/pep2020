@@ -3,7 +3,8 @@
 #include <math.h>
 #include <stopper.h>
 
-double f(double t){
+double f(double t)
+{
     return t+sin(t);
 }
 
@@ -26,7 +27,8 @@ int main(int argc, char** argv)
 
     t=a; //my starting position
 
-    for (i=0; i<numpoints; i++){
+    for (i=0; i<numpoints; i++)
+    {
         globalsum = globalsum+f(t);
         t=t+w;
     }
@@ -38,5 +40,5 @@ int main(int argc, char** argv)
     stopSOMP(&st);
     tprintfOMP(&st, "\n");
     //printf("The answer is: %f\n", answer);
-
 }
+

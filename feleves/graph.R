@@ -2,6 +2,7 @@ library('ggplot2')
 library('reshape')
 library('Cairo')
 library("grid")
+library("scales")
 
 args <- commandArgs(trailingOnly=TRUE)
 repeats <- as.integer(args[1])
@@ -21,8 +22,9 @@ figure1 <- function(filename, data, plottitle, xlabel, ylabel, plotlabels)
   scale_shape_manual(values=c(19, 18, 17, 16, 15, 14, 14, 15), name="", labels=plotlabels, guide=guide_legend(keyheight=unit(2, "line"), keywidth=unit(5, "line"), nrow=3, ncol=2)) +
   scale_linetype_manual(values=c(19, 18, 17, 16, 15, 14, 19, 18), name="", labels=plotlabels, guide=guide_legend(keyheight=unit(2, "line"), keywidth=unit(5, "line"), nrow=3, ncol=2)) +
 	  theme_gray(24) +
-      scale_x_continuous(trans='log2')+
-#     scale_y_continuous(trans='log2')+
+      scale_x_continuous(trans = log2_trans(),
+      breaks = trans_breaks("log2", function(x) 2^x),
+      labels = trans_format("log2", math_format(2^.x)))+
 #	  scale_x_continuous(breaks=round(seq(1.0, 10.0, by=0.5), 1)) +
 #	  scale_y_continuous(breaks=sort(c(round(seq(0, max(data$value)+1, by=20), 1)))) +
 	  theme(legend.position="bottom")
@@ -45,16 +47,13 @@ linelabels <- c('Szekvenciális implementáció', 'OpenMP párhuzamosítás 2 sz
 data0 <- read.table('./results/runtimes/numbers-szekv.txt')
 data1 <- read.table('./results/runtimes/numbers-par-2.txt')
 data2 <- read.table('./results/runtimes/numbers-par-4.txt')
-data3 <- read.table('./results/runtimes/numbers-par-8.txt')
 
 data0 <- computeMeans(data0, repeats)
 data1 <- computeMeans(data1, repeats)
 data2 <- computeMeans(data2, repeats)
-data3 <- computeMeans(data3, repeats)
 
-
-d <- data.frame(data0$V1, data0$V2, data1$V2, data2$V2, data3$V2)
-colnames(d) <- c('sigma', 'runtime1', 'runtime2', 'runtime3', 'runtime4')
+d <- data.frame(data0$V1, data0$V2, data1$V2, data2$V2)
+colnames(d) <- c('sigma', 'runtime1', 'runtime2', 'runtime3')
 dataa <- melt(d, id='sigma', variable_name='series')
 
 figure1("./results/figure-n.eps", dataa, expression(paste("Futásidők az N paraméter függvényében")), 'N', 'Futási idő (s)', linelabels)
@@ -63,17 +62,13 @@ figure1("./results/figure-n.eps", dataa, expression(paste("Futásidők az N para
 data0 <- read.table('./results/runtimes/chunks-szekv.txt')
 data1 <- read.table('./results/runtimes/chunks-par-2.txt')
 data2 <- read.table('./results/runtimes/chunks-par-4.txt')
-data3 <- read.table('./results/runtimes/chunks-par-8.txt')
 
 data0 <- computeMeans(data0, repeats)
 data1 <- computeMeans(data1, repeats)
 data2 <- computeMeans(data2, repeats)
-data3 <- computeMeans(data3, repeats)
 
-
-d <- data.frame(data0$V1, data0$V2, data1$V2, data2$V2, data3$V2)
-colnames(d) <- c('sigma', 'runtime1', 'runtime2', 'runtime3', 'runtime4')
+d <- data.frame(data0$V1, data0$V2, data1$V2, data2$V2)
+colnames(d) <- c('sigma', 'runtime1', 'runtime2', 'runtime3')
 dataa <- melt(d, id='sigma', variable_name='series')
 
 figure1("./results/figure-chunk.eps", dataa, expression(paste("Futásidők az Chunk-size paraméter függvényében (rögzített N mellett)")), 'Chunk-size', 'Futási idő (s)', linelabels)
-

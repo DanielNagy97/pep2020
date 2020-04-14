@@ -7,38 +7,35 @@ int* arr;
 
 typedef struct ThreadParameters
 {
-    // input
     int* array;
-    int start;
-    int end;
+    int start_point;
+    int end_point;
 
-    // output
-    int smallest;
+    int min;
 } ThreadParameters;
 
-void* find_min_max(void* args)
+void* find_min(void* args)
 {
     struct ThreadParameters* params = (struct ThreadParameters*)args;
     int *array = params->array;
-    int start = params->start;
-    int end = params->end;
-    int smallest = array[start];
+    int start_point = params->start_point;
+    int end_point = params->end_point;
+    int min = array[start_point];
 
-    for (int i = start; i < end; i++)
+    for (int i = start_point; i < end_point; i++)
     {
-        if (array[i] < smallest)
+        if (array[i] < min)
         {
-            smallest = array[i];
+            min = array[i];
         }
     }
 
-    // write the result back to the parameter structure
-    params->smallest = smallest;
+    params->min = min;
 
     return NULL;
 }
 
-void fillArray(long int array_size)
+void fill_array(long int array_size)
 {
     for (int i = 0; i < array_size; i++)
     {
@@ -48,51 +45,46 @@ void fillArray(long int array_size)
 
 int main(int argc, char** argv)
 {
-    int smallest;
+    int min;
 
     long int array_size = atoi(argv[1]);
     int threads_count = atoi(argv[2]);
+    int chunk_size = array_size / threads_count;
 
     arr = malloc(sizeof(*arr) * array_size);
 
-    // declare an array of threads and associated parameter instances
     pthread_t* threads= (pthread_t*)malloc(sizeof(pthread_t)*threads_count);
     ThreadParameters* thread_parameters= (ThreadParameters*)malloc(sizeof(ThreadParameters)*threads_count);
-
-    // intialize the array    
-    fillArray(array_size);
+  
+    fill_array(array_size);
 
     stopperOMP st;
     startSOMP(&st);
 
-    // smallest and largest needs to be set to something
-    smallest = arr[0];
+    min = arr[0];
 
-    // start all the threads
     for (int i = 0; i < threads_count; i++)
     {
         thread_parameters[i].array = arr;
-        thread_parameters[i].start = i * (array_size / threads_count);
-        thread_parameters[i].end = (i+1) * (array_size / threads_count);
-        pthread_create(&threads[i], NULL, find_min_max, &thread_parameters[i]);
+        thread_parameters[i].start_point = i * chunk_size;
+        thread_parameters[i].end_point = (i+1) * chunk_size;
+        pthread_create(&threads[i], NULL, find_min, &thread_parameters[i]);
     }
 
-    // wait for all the threads to complete
     for (int i = 0; i < threads_count; i++)
     {
         pthread_join(threads[i], NULL);
     }
-
-    // Now aggregate the "smallest" and "largest" results from all thread runs    
+ 
     for (int i = 0; i < threads_count; i++)
     {
-        if (thread_parameters[i].smallest < smallest)
+        if (thread_parameters[i].min < min)
         {
-            smallest = thread_parameters[i].smallest;
+            min = thread_parameters[i].min;
         }
     }
     stopSOMP(&st);
     tprintfOMP(&st, "\n");
 
-    //printf("Smallest is %d\n", smallest);
+    //printf("Min is %d\n", min);
 }
